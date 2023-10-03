@@ -112,8 +112,8 @@ module.exports.signupUser = async (req, res) => {
           if (results.length === 1) {
             // L'utilisateur est authentifié avec succès
             const user = results[0];
-            req.session.loggedInUser = user.o_token;
-            res.status(200).json({ message: 'Connexion réussie.', token: user.o_token });
+            req.session.loggedInUser = [user.o_token, user.o_id];
+            res.status(200).json({ message: 'Connexion réussie.', token: user.o_id });
           } else {
             // L'authentification a échoué
             res.status(401).json({ message: 'Email ou mot de passe incorrect.' });
