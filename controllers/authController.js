@@ -64,13 +64,22 @@ module.exports.signup = async (req, res) => {
   module.exports.checkAuth = async (req, res) => {
     if (req.session.loggedInUser) {
       // L'utilisateur est authentifié, vous pouvez obtenir son e-mail
-      console.log("VAMOOOOS")
-  
-      res.status(200).json({ message: 'Utilisateur authentifié', email: email });
+      res.status(200).json({ message: 'Utilisateur authentifié'});
     } else {
       // L'utilisateur n'est pas authentifié
       res.status(401).json({ message: 'Accès non autorisé.' });
     }
   };
+
+  module.exports.logout = async (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Erreur lors de la déconnexion :', err);
+        res.status(500).json({ message: 'Une erreur est survenue lors de la déconnexion.' });
+      } else {
+        res.status(200).json({ message: 'Utilisateur déconnecté.'});
+      }
+    });
+  }
   
   
