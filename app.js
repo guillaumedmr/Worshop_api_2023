@@ -4,6 +4,7 @@ require('dotenv').config();
 
 // Routes
 const authRoute = require('./routes/authRoutes');
+const missionRoute = require('./routes/missionRoutes');
 
 // Express
 const app = express();
@@ -19,6 +20,8 @@ app.use(session({
 
 // Routes
 app.use("/auth", authRoute);
+app.use("/mission", missionRoute);
+// app.use("/organisations")
 
 // Server
 app.listen(3000, () => {
