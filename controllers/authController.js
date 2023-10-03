@@ -1,22 +1,24 @@
 const connection = require('../services/connectBDD');
+const uuid = require('uuid');
+
 module.exports.signup = async (req, res) => {
     try {
-
-      console.log(req.body)
       // Récupérez les données du formulaire d'inscription depuis req.body
       const { u_nom, u_prenom, u_login, u_mail, u_telephone, u_role, u_age, u_sexe, u_password } = req.body;
+
+      const u_token = uuid.v4();
 
   
       // Insérez les données dans la base de données
       const sql = `
         INSERT INTO coeurlocal.utilisateur
-        (u_nom, u_prenom, u_login, u_mail, u_telephone, u_role, u_age, u_sexe, u_nombre_point, u_password)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, 0, ?)
+        (u_nom, u_prenom, u_login, u_mail, u_telephone, u_role, u_age, u_sexe, u_nombre_point, u_password, u_token)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?)
       `;
   
       connection.query(
         sql,
-        [0, u_nom, u_prenom, u_login, u_mail, u_telephone, u_role, u_age, u_sexe, u_password],
+        [u_nom, u_prenom, u_login, u_mail, u_telephone, u_role, u_age, u_sexe, u_password, u_token],
         (err, results) => {
           if (err) {
             console.error('Erreur lors de l\'inscription :', err);
@@ -46,8 +48,9 @@ module.exports.signup = async (req, res) => {
         } else {
           if (results.length === 1) {
             // L'utilisateur est authentifié avec succès
-            req.session.loggedInUser = u_mail;
-            res.status(200).json({ message: 'Connexion réussie.' });
+            const user = results[0];
+            req.session.loggedInUser = user.u_token;
+            res.status(200).json({ message: 'Connexion réussie.', token: user.u_token });
           } else {
             // L'authentification a échoué
             res.status(401).json({ message: 'Nom d\'utilisateur ou mot de passe incorrect.' });
