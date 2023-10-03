@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 const missionController = require("../controllers/missionController.js")
 
-router.post("/signup", missionController.create);
+router.post("/create", missionController.create);
+router.post("/map", missionController.map);
 
 module.exports = router
