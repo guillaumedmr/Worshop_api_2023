@@ -4,7 +4,7 @@ const uuid = require('uuid');
 module.exports.signupUser = async (req, res) => {
     try {
       // Récupérez les données du formulaire d'inscription depuis req.body
-      const { u_nom, u_prenom, u_login, u_mail, u_telephone, u_age, u_sexe, u_password } = req.body;
+      const { u_nom, u_prenom, u_login, u_mail, u_telephone, u_age, u_password, u_sexe } = req.body;
 
       const u_token = uuid.v4();
 
@@ -12,13 +12,13 @@ module.exports.signupUser = async (req, res) => {
       // Insérez les données dans la base de données
       const sql = `
         INSERT INTO coeurlocal.utilisateur
-        (u_nom, u_prenom, u_login, u_mail, u_telephone, u_age, u_sexe, u_nombre_point, u_password, u_token)
+        (u_nom, u_prenom, u_login, u_mail, u_telephone, u_age, u_password, u_nombre_point, u_sexe, u_token)
         VALUES(?, ?, ?, ?, ?, ?, ?, 0, ?, ?)
       `;
   
       connection.query(
         sql,
-        [u_nom, u_prenom, u_login, u_mail, u_telephone, u_age, u_sexe, u_password, u_token],
+        [u_nom, u_prenom, u_login, u_mail, u_telephone, u_age, u_password, u_sexe, u_token],
         (err, results) => {
           if (err) {
             console.error('Erreur lors de l\'inscription :', err);
@@ -58,6 +58,7 @@ module.exports.signupUser = async (req, res) => {
         }
 
       });
+
     } catch (error) {
       console.error('Erreur lors de la connexion :', error);
       res.status(500).json({ message: 'Une erreur est survenue lors de la connexion.' });
@@ -67,7 +68,7 @@ module.exports.signupUser = async (req, res) => {
   module.exports.signupOrg = async (req, res) => {
     try {
       // Récupérez les données du formulaire d'inscription depuis req.body
-      const { o_login, o_nom, o_siret, o_adresse, o_code_postal, o_ville, o_pays, o_forme_juridique, o_mail, o_telephone, o_interlocuteur, o_password, o_designation } = req.body;
+      const { o_nom, o_siret, o_adresse, o_code_postal, o_ville, o_forme_juridique, o_mail, o_telephone, o_interlocuteur, o_password, o_activite, o_site_web } = req.body;
 
       const o_token = uuid.v4();
 
@@ -75,13 +76,13 @@ module.exports.signupUser = async (req, res) => {
       // Insérez les données dans la base de données
       const sql = `
       INSERT INTO coeurlocal.organisateur
-      (o_login, o_nom, o_siret, o_adresse, o_code_postal, o_ville, o_pays, o_forme_juridique, o_mail, o_telephone, o_interlocuteur, o_password, o_designation, o_token)
-      VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      (o_nom, o_siret, o_adresse, o_code_postal, o_ville, o_forme_juridique, o_mail, o_telephone, o_interlocuteur, o_password, o_activite, o_token, o_site_web)
+      VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       `;
   
       connection.query(
         sql,
-        [o_login, o_nom, o_siret, o_adresse, o_code_postal, o_ville, o_pays, o_forme_juridique, o_mail, o_telephone, o_interlocuteur, o_password, o_designation, o_token],
+        [o_nom, o_siret, o_adresse, o_code_postal, o_ville, o_forme_juridique, o_mail, o_telephone, o_interlocuteur, o_password, o_activite, o_token, o_site_web],
         (err, results) => {
           if (err) {
             console.error('Erreur lors de l\'inscription :', err);
@@ -147,5 +148,4 @@ module.exports.signupUser = async (req, res) => {
       }
     });
   }
-  
   
