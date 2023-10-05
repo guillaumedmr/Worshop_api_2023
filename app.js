@@ -25,13 +25,11 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false },
 }));
 
 // Routes
 app.use("/auth", authRoute);
 app.use("/mission", missionRoute);
-// app.use("/organisations")
 
 // Server
 app.listen(3000, () => {
