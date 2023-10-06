@@ -1,6 +1,6 @@
 const connection = require('../services/connectBDD');
 
-module.exports.getAllOrganisation = async (res) => {
+module.exports.getAllOrganisation = async (req, res) => {
     const sql = `
         select o_id, o_nom, o_siret, o_adresse, o_code_postal, o_ville, o_forme_juridique, o_mail, o_telephone, o_site_web, o_interlocuteur, o_activite from organisateur 
     `
