@@ -50,10 +50,11 @@ module.exports.signupUser = async (req, res) => {
             // L'utilisateur est authentifié avec succès
             const user = results[0];
             req.session.loggedInUser = user.u_token;
+            console.log("Connexion reussi")
             res.status(200).json({ message: 'Connexion réussie.', token: user.u_token });
           } else {
             // L'authentification a échoué
-            res.status(401).json({ message: 'Email ou mot de passe incorrect.' });
+            res.status(200).json({ message: 'Email ou mot de passe incorrect.' });
           }
         }
 
@@ -113,11 +114,12 @@ module.exports.signupUser = async (req, res) => {
           if (results.length === 1) {
             // L'utilisateur est authentifié avec succès
             const user = results[0];
-            req.session.loggedInUser = [user.o_token, user.o_id];
+            const sessionData = req.session.loggedInUser;
+            sessionData = user.o_token;
             res.status(200).json({ message: 'Connexion réussie.', token: user.o_id });
           } else {
             // L'authentification a échoué
-            res.status(401).json({ message: 'Email ou mot de passe incorrect.' });
+            res.status(200).json({ message: 'Email ou mot de passe incorrect.' });
           }
         }
 
@@ -129,23 +131,24 @@ module.exports.signupUser = async (req, res) => {
   };
 
   module.exports.checkAuth = async (req, res) => {
+    console.log(req.session)
     if (req.session.loggedInUser) {
       // L'utilisateur est authentifié, vous pouvez obtenir son e-mail
+      console.log('Utilisateur connecté.');
       res.status(200).json({ message: 'Utilisateur authentifié'});
     } else {
       // L'utilisateur n'est pas authentifié
-      res.status(401).json({ message: 'Accès non autorisé.' });
+      console.log('Utilisateur non connecté.');
+      res.status(200).json({ message: 'Utilisateur non connecté.' });
     }
   };
 
   module.exports.logout = async (req, res) => {
     req.session.destroy((err) => {
       if (err) {
-        console.error('Erreur lors de la déconnexion :', err);
         res.status(500).json({ message: 'Une erreur est survenue lors de la déconnexion.' });
       } else {
         res.status(200).json({ message: 'Utilisateur déconnecté.'});
       }
     });
   }
-  
